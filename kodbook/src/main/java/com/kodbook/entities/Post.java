@@ -16,9 +16,13 @@ public class Post {
 	@Lob
 	@Basic(fetch=FetchType.LAZY)
 	@Column(columnDefinition="LongBLOB")
-	private byte [] photo;
+	
 	private int likes;
 	private List<String> comments;
+	private byte [] photo;
+	
+	@ManyToOne
+	private User user;
 	
 	public String getPhotoBase64() {
 		if(photo==null){
@@ -32,13 +36,14 @@ public class Post {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Post(Long id, String caption, byte[] photo, int likes, List<String> comments) {
+	public Post(Long id, String caption, int likes, List<String> comments, byte[] photo, User user) {
 		super();
 		this.id = id;
 		this.caption = caption;
-		this.photo = photo;
 		this.likes = likes;
 		this.comments = comments;
+		this.photo = photo;
+		this.user = user;
 	}
 
 	public Long getId() {
@@ -57,14 +62,6 @@ public class Post {
 		this.caption = caption;
 	}
 
-	public byte[] getPhoto() {
-		return photo;
-	}
-
-	public void setPhoto(byte[] photo) {
-		this.photo = photo;
-	}
-
 	public int getLikes() {
 		return likes;
 	}
@@ -81,11 +78,29 @@ public class Post {
 		this.comments = comments;
 	}
 
+	public byte[] getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	@Override
 	public String toString() {
-		return "Post [id=" + id + ", caption=" + caption + ", photo=" + Arrays.toString(photo) + ", likes=" + likes
-				+ ", comments=" + comments + "]";
+		return "Post [id=" + id + ", caption=" + caption + ", likes=" + likes + ", comments=" + comments + ", photo="
+				+ Arrays.toString(photo) + ", user=" + user + "]";
 	}
+
+
 
 	
 	

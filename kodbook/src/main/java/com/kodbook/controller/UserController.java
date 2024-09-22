@@ -4,12 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.kodbook.entities.User;
+import com.kodbook.service.PostService;
 import com.kodbook.service.UserService;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 
@@ -18,7 +20,8 @@ public class UserController {
 
 	@Autowired
 	UserService service;
-	
+	@Autowired
+	PostService postService;
 	@PostMapping("/signUp")
 	public String addUser(@ModelAttribute User user) {
 		String username = user.getUsername();
@@ -32,11 +35,17 @@ public class UserController {
 	@PostMapping("/login")
 	public String login(@RequestParam String username, @RequestParam String password )  {
 		boolean status= service.validateUser(username, password);
-		if(status) {
+		if(status == true) {
 			return "home";
 		}
 		return "index";
 	}
+	@PostMapping("/updateProfile")
+	public String updateProfile(@RequestParam String dob) {
+		System.out.println(dob);
+		return "myProfile";
+	}
+	
 	
 	
 }
