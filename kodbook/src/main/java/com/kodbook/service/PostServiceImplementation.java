@@ -38,4 +38,15 @@ public class PostServiceImplementation implements PostService{
 	public void updatePost(Post post) {
 		repo.save(post);
 	}
+
+	@Override
+	public List<Post> getPosts() {
+		return repo.findAll();
+	}
+
+	@Override
+	public void setPosts(List<Post> posts) {
+		repo.save(posts);
+		
+	}
 }

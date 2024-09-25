@@ -5,12 +5,34 @@
 <title>Profile page</title>
 </head>
 <body>
-<nav>
-<a href="/goHome"><h3>Home</h3></a>
-<a href="/openMyProfile"><h3>Profile</h3></a>
-<a href="/openCreatePost"><h3>Upload</h3></a>
-</nav>
-<h3>Welcome to Profile Section</h3>
-<a href="/openEditProfile">Edit Profile</a>
+	<nav>
+		<span th:text="${session.username}"></span> <a href="/goHome"><h3>Home</h3></a>
+		<a href="/openMyProfile"><h3>Profile</h3></a> <a
+			href="/openCreatePost"><h3>Upload</h3></a>
+			<a href="/logout"><h3>Logout</h3></a>
+	</nav>
+	<h3>Welcome to Profile Section</h3>
+	<a href="/openEditProfile">Edit Profile</a>
+	   <img th:if="${user.photoBase64}" 
+        th:src="'data:image/jpeg;base64,' + ${user.photoBase64}" 
+        alt="Profile Photo" />
+	  <div class="username">
+            <h1 th:text="${user.username}"></h1>
+        </div>
+         <div class="profile-info">
+            <ul>
+                <li><i class="fas fa-calendar-alt"></i> Date of Birth: <span th:text="${user.dob}"></span></li>
+                <li><i class="fas fa-venus-mars"></i> Gender: <span th:text="${user.gender}"></span></li>
+                <li><i class="fas fa-map-marker-alt"></i> City: <span th:text="${user.city}"></span></li>
+                <li><i class="fas fa-graduation-cap"></i> College: <span th:text="${user.college}"></span></li>
+                <li><i class="fas fa-info-circle"></i> Bio: <span th:text="${user.bio}"></span></li>
+            </ul>
+
+            <!-- Social Links -->
+            <div class="social-links">
+                <p><i class="fab fa-linkedin"></i> <a th:href="${user.linkedIn}" target="_blank">LinkedIn</a></p>
+                <p><i class="fab fa-github"></i> <a th:href="${user.gitHub}" target="_blank">GitHub</a></p>
+            </div>
+        </div>
 </body>
 </html>

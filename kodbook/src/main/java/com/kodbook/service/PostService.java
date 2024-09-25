@@ -15,4 +15,8 @@ public interface PostService {
 	Post getPost(Long id);
 
 	void updatePost(Post post);
+
+	List<Post> getPosts();
+
+	void setPosts(List<Post> posts);
 }

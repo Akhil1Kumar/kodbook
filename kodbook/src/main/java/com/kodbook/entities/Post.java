@@ -13,13 +13,14 @@ public class Post {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String caption;
-	@Lob
-	@Basic(fetch=FetchType.LAZY)
-	@Column(columnDefinition="LongBLOB")
+	
 	
 	private int likes;
 	private List<String> comments;
-	private byte [] photo;
+	@Lob
+	@Basic(fetch=FetchType.LAZY)
+	@Column(columnDefinition="LongBLOB")
+	private byte[] photo;
 	
 	@ManyToOne
 	private User user;

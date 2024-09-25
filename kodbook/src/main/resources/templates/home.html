@@ -2,18 +2,21 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Home Page</title>
 </head>
 <body>
-<nav>
-<a href="/goHome"><h3>Home</h3></a>
-<a href="/openMyProfile"><h3>Profile</h3></a>
-<a href="/openCreatePost"><h3>Upload</h3></a>
-
+	<nav>
+		<span th:text="${session.username}"></span> <a href="/goHome"><h3>Home</h3></a>
+		<a href="/openMyProfile"><h3>Profile</h3></a> 
+		<a href="/openCreatePost"><h3>Upload</h3></a>
+		<a href="/logout"><h3>Logout</h3></a>
+	</nav>
 	<h1>Post details</h1>
 	<div>
 		<span th:each="post:${allPosts}">
-
+			<p>
+				<strong>User:</strong> <span th:text="${post.user.username}"></span>
+			</p>
 			<p>
 				<strong>Photo:</strong> <img th:if="${post.photoBase64}"
 					th:src="'data:image/jpeg;base64,' + ${post.photoBase64}"
@@ -51,6 +54,6 @@
 
 		<hr />
 	</div>
-</nav>
+
 </body>
 </html>

@@ -8,8 +8,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.kodbook.entities.Post;
+import com.kodbook.entities.User;
 import com.kodbook.service.PostService;
 import com.kodbook.service.UserService;
+
+import jakarta.servlet.http.HttpSession;
 
 
 
@@ -42,7 +45,10 @@ public class NavigationController {
 	}
 	
 	@GetMapping("/openMyProfile")
-	public String openProfile() {
+	public String openProfile(HttpSession session, Model model) {
+		String username= (String)session.getAttribute("username");
+		User user= service.getUser(username);
+		model.addAttribute("user", user);
 		return "myProfile";
 	}
 	

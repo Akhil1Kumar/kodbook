@@ -9,10 +9,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 import com.kodbook.entities.Post;
+import com.kodbook.entities.User;
 import com.kodbook.service.PostService;
+import com.kodbook.service.UserService;
+
+import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,28 +25,44 @@ public class PostController {
 
 	@Autowired
 	PostService service;
+	@Autowired
+	UserService userService;
 
 	@PostMapping("/createPost")
-	public String createPost(@RequestParam("caption") String caption, @RequestParam("photo") MultipartFile photo) {
+	public String createPost(@RequestParam ("caption") String caption,
+            @RequestParam("photo") MultipartFile photo,
+            Model model, HttpSession session) {
+		
+		String username = (String) session.getAttribute("username");
+		User user = userService.getUser(username);
+		
 		Post post = new Post();
+		//updating post object
+		post.setUser(user);
+		
 		post.setCaption(caption);
-		try {
-			{
-				post.setPhoto(photo.getBytes());
-			}
+		try {						
+			post.setPhoto(photo.getBytes());
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		service.createPost(post);
+		//updating user object
+				List<Post> posts = user.getPosts();
+				if(posts == null) {
+					posts = new ArrayList<Post>();
+				}
+				posts.add(post);
+				user.setPosts(posts);
+				userService.updateUser(user);
+				
+		List<Post> allPosts = service.fetchAllPosts();
+		model.addAttribute("allPosts", allPosts);
 		return "home";
 	}
 
-	@GetMapping("/showPosts")
-	public String viewPost(Model model) {
-		List<Post> allPosts = service.fetchAllPosts();
-		model.addAttribute("allPosts", allPosts);
-		return "showPosts";
-	}
+
 
 	@GetMapping("/likePost")
 	public String likePost(@RequestParam Long id, Model model) {
@@ -52,7 +71,7 @@ public class PostController {
 		service.updatePost(post);
 		List<Post> allPosts = service.fetchAllPosts();
 		model.addAttribute("allPosts", allPosts);
-		return "showPosts";
+		return "home";
 	}
 
 	@PostMapping("/addComment")
@@ -69,7 +88,7 @@ public class PostController {
 
 		List<Post> allPosts = service.fetchAllPosts();
 		model.addAttribute("allPosts", allPosts);
-		return "showPosts";
+		return "home";
 	}
 
 }
