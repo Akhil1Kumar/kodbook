@@ -13,6 +13,11 @@ import com.kodbook.service.PostService;
 import com.kodbook.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+
 
 
 
@@ -38,10 +43,14 @@ public class NavigationController {
 		return "post";
 	}
 	@GetMapping("/goHome")
-	public String login(Model model)	{
+	public String login(Model model, HttpSession session)	{
 			List<Post> allPosts = postService.fetchAllPosts();
 			model.addAttribute("allPosts", allPosts);
-			return "home";
+			if(session.getAttribute("username")!=null)
+				return "home";
+				else 
+					return "index";
+			
 	}
 	
 	@GetMapping("/openMyProfile")
@@ -49,13 +58,37 @@ public class NavigationController {
 		String username= (String)session.getAttribute("username");
 		User user= service.getUser(username);
 		model.addAttribute("user", user);
-		return "myProfile";
+		List<Post> myPosts = user.getPosts();
+		model.addAttribute("myPosts", myPosts);
+		if(session.getAttribute("username")!=null)
+			return "myProfile";
+			else 
+				return "index";
+		
+	}
+	@PostMapping("/visitProfile")
+	public String visitProfile(@RequestParam String profileName, Model model) {
+		User user= service.getUser(profileName);
+		model.addAttribute("user", user);
+		List<Post> myPosts = user.getPosts();
+		model.addAttribute("myPosts", myPosts);
+		return "showUserProfile";
 	}
 	
+	
 	@GetMapping("/openEditProfile")
-	public String editProfile() {
+	public String editProfile(HttpSession session) {
+		if(session.getAttribute("username")!=null)
 		return "editProfile";
+		else 
+			return "index";
 	}
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+		session.invalidate();
+		return "index";
+	}
+	
 	
 	
 	

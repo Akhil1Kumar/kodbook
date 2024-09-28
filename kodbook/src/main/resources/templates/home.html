@@ -6,7 +6,8 @@
 </head>
 <body>
 	<nav>
-		<span th:text="${session.username}"></span> <a href="/goHome"><h3>Home</h3></a>
+		<a href="/openMyProfile"><span th:text="${session.username}"></span></a>
+		<a href="/goHome"><h3>Home</h3></a>
 		<a href="/openMyProfile"><h3>Profile</h3></a> 
 		<a href="/openCreatePost"><h3>Upload</h3></a>
 		<a href="/logout"><h3>Logout</h3></a>
@@ -15,7 +16,16 @@
 	<div>
 		<span th:each="post:${allPosts}">
 			<p>
-				<strong>User:</strong> <span th:text="${post.user.username}"></span>
+				<strong>User:</strong> <span th:text="${post.user.username}"></span></a>
+				
+				<form action="/visitProfile" method="post">
+				<a href="/showUserProfile"><span class="username" th:text="${post.user.username}"></span></a>
+				<input type="hidden" name="profileName" th:value=${post.user.username}>
+				<input type="submit" value="visitProfile">
+				</form>
+				<img th:if="${post.user.photoBase64}"
+					th:src="'data:image/jpeg;base64,' + ${post.user.photoBase64}"  
+					alt="Profile Photo" />
 			</p>
 			<p>
 				<strong>Photo:</strong> <img th:if="${post.photoBase64}"
